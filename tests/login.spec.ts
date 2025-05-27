@@ -20,6 +20,8 @@ test.describe("load login", () => {
     await expect(page.locator('input[type="Email"]')).toBeVisible();
     await expect(page.locator('input[type="Password"]')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Log in' })).toBeVisible();
+
+    await page.screenshot({ path: 'screenshots/login-form-loads.png', fullPage: true });
     });
 })
 
@@ -29,9 +31,12 @@ test.describe("load login", () => {
 test.describe("invalid login", () => {
     test('Login fails and error is displayed', async ({ page }) => {
     await page.goto('https://bonds-client-test.downinglabs.co.uk/account/login');
+    
     const loginPage = new LoginPage(page);
+
     await loginPage.login('invalid@email.com', 'invalid');
     await expect(loginPage.errorMessage).toBeVisible();
+
     await page.screenshot({ path: 'screenshots/invalid-login-error.png', fullPage: true });
     
     });
@@ -45,8 +50,11 @@ test.describe("invalid login", () => {
 test.describe("valid login", () => {
     test('Login page loads and displays the clients profile', async ({ page }) => {
     await page.goto(`${baseUrl}/account/login`);
+
     const loginPage = new LoginPage(page);
+
     await loginPage.login(email, password);
+    
     await expect(page).toHaveURL(`${baseUrl}/account/dashboard`);
     await page.waitForLoadState('networkidle');
     await expect(loginPage.breadCrumbs).toBeVisible();

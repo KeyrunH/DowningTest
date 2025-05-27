@@ -19,17 +19,24 @@ const password = process.env.LOGIN_PASSWORD!;
 test.describe("access profile", () => {
     test('client logs in and accesses their profile', async ({ page }) => {
     await page.goto(`${baseUrl}/account/login`);
+
     const loginPage = new LoginPage(page);
     const dashboard = new Dashboard(page);
-    const profileSettings = new ProfileSettings(page);  
+    const profileSettings = new ProfileSettings(page);
+
     await loginPage.login(email, password);
     await expect(page).toHaveURL(`${baseUrl}/account/dashboard`);
     await expect(dashboard.breadCrumbs).toBeVisible();
+
     await dashboard.accountMenu.click();
     await dashboard.profileButton.click();
+
     await expect(page).toHaveURL(`${baseUrl}/account/profile`);
+    
     await page.waitForLoadState('networkidle');
+
     await expect(profileSettings.profileHeading).toBeVisible();
+
     await page.screenshot({ path: 'screenshots/profile_access.png', fullPage: true });
     });
 
@@ -38,7 +45,7 @@ test.describe("access profile", () => {
 // update their phone number with a newly generated random value, and save the change. 
 // It checks that the profile page is correctly loaded, the phone number field is visible, 
 // and that the update is confirmed by a success message.
-test.describe.only("update", () => {
+test.describe("update", () => {
   test('client logs in and updates their phone number', async ({ page }) => {
     await page.goto(`${baseUrl}/account/login`);
     const loginPage = new LoginPage(page);
