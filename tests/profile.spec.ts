@@ -38,8 +38,8 @@ test.describe("access profile", () => {
 // update their phone number with a newly generated random value, and save the change. 
 // It checks that the profile page is correctly loaded, the phone number field is visible, 
 // and that the update is confirmed by a success message.
-test.describe("update", () => {
-  test('client logs in and accesses their profile', async ({ page }) => {
+test.describe.only("update", () => {
+  test('client logs in and updates their phone number', async ({ page }) => {
     await page.goto(`${baseUrl}/account/login`);
     const loginPage = new LoginPage(page);
     const dashboard = new Dashboard(page);
@@ -59,7 +59,7 @@ test.describe("update", () => {
     await profileSettings.editPersonalDetails.click();
     await expect(profileSettings.phoneNumber).toBeVisible();
 
-    // ✅ Call the random phone number generator from your POM
+    //Call the random phone number generator from your POM
     const newPhone = await profileSettings.updatePhoneNumberWithRandom();
 
     // Optionally assert the field value
@@ -68,6 +68,7 @@ test.describe("update", () => {
     // Proceed to click "Update" to save
     await profileSettings.updatePersonalDetails.click();
     await expect(profileSettings.personalDetailsUpdated).toBeVisible();
+    await expect(page.getByText(newPhone)).toBeVisible();
 
     await page.screenshot({ path: 'screenshots/profile_update.png', fullPage: true });
   });
