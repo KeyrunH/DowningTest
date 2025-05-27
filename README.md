@@ -1,11 +1,11 @@
 # Playwright UI Tests For Downing Bonds
 ## Installation
-### Clone the repository (or create a new folder for your tests):
+### Clone the repository:
 ```
 git clone https://github.com/your-org/your-repo.git
 cd your-repo
 ```
-### Initialize a Node.js project (if not already done):
+### Initialize a Node.js project:
 ```
 npm init -y
 ```
