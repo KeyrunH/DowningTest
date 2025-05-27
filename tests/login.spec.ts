@@ -42,7 +42,7 @@ test.describe("invalid login", () => {
 // and checks that the user is redirected to the dashboard. It waits for the page to
 // fully load (network idle), asserts that the breadcrumb navigation is visible (as a
 // sign of a successful dashboard load), and captures a screenshot of the result.
-test.describe.only("valid login", () => {
+test.describe("valid login", () => {
     test('Login page loads and displays the clients profile', async ({ page }) => {
     await page.goto(`${baseUrl}/account/login`);
     const loginPage = new LoginPage(page);
