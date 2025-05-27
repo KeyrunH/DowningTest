@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const baseUrl = process.env.BASE_URL!;
+const email = process.env.LOGIN_EMAIL!;
+const password = process.env.LOGIN_PASSWORD!;
+
 
 // This test was copied straight from ChatGPT
 // The selectors needed to be updated
@@ -20,12 +27,29 @@ test.describe("load login", () => {
 // It navigates to the login page, enters a fake email and password, and clicks the "Log In" button.
 // It then checks that the expected error message appears and captures screenshots before and after the attempt.
 test.describe("invalid login", () => {
-    test('Login page loads and displays the form', async ({ page }) => {
+    test('Login fails and error is displayed', async ({ page }) => {
     await page.goto('https://bonds-client-test.downinglabs.co.uk/account/login');
     const loginPage = new LoginPage(page);
     await loginPage.login('invalid@email.com', 'invalid');
     await expect(loginPage.errorMessage).toBeVisible();
     await page.screenshot({ path: 'screenshots/invalid-login-error.png', fullPage: true });
     
+    });
+})
+
+// This test verifies that a user can successfully log in with valid credentials.
+// It navigates to the login page, uses the LoginPage object to perform the login,
+// and checks that the user is redirected to the dashboard. It waits for the page to
+// fully load (network idle), asserts that the breadcrumb navigation is visible (as a
+// sign of a successful dashboard load), and captures a screenshot of the result.
+test.describe.only("valid login", () => {
+    test('Login page loads and displays the clients profile', async ({ page }) => {
+    await page.goto(`${baseUrl}/account/login`);
+    const loginPage = new LoginPage(page);
+    await loginPage.login(email, password);
+    await expect(page).toHaveURL(`${baseUrl}/account/dashboard`);
+    await page.waitForLoadState('networkidle');
+    await expect(loginPage.breadCrumbs).toBeVisible();
+    await page.screenshot({ path: 'screenshots/valid_login.png', fullPage: true });    
     });
 })

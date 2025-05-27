@@ -11,6 +11,7 @@ export class LoginPage {
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
+  readonly breadCrumbs: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,6 +19,7 @@ export class LoginPage {
     this.passwordInput = page.locator('input[type="Password"]');
     this.loginButton = page.getByRole('button', { name: 'Log In' });
     this.errorMessage = page.locator('text="The email/username or password provided is incorrect"');
+    this.breadCrumbs = page.getByText('Home Dashboard');
   }
 
   async navigate() {
